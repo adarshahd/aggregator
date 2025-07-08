@@ -20,7 +20,7 @@ WORKDIR /var/www/html
 
 RUN composer install --prefer-dist && \
     php artisan octane:install --server=frankenphp && \
-    touch /var/www/html/database/database.sqlite && \
+    touch database/database.sqlite && \
     php artisan migrate
 
 CMD [ "php", "/var/www/html/artisan", "octane:start", "--server=frankenphp" ]
