@@ -9,7 +9,12 @@ env:
 name: Build & Publish To Github Container Registry
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
       - name: "Code checkout"
         uses: actions/checkout@v4
