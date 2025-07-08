@@ -1,0 +1,13 @@
+**/container
+**/node_modules
+**/assets/images
+**/caddy
+
+.dockerignore
+.editorconfig
+.env
+.gitattributes
+.gitignore
+.git
+frankenphp
+frankenphp-worker.php
