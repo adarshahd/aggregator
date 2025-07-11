@@ -21,7 +21,7 @@ To build the application you need to have Podman/Docker installed in your system
 ```
 podman build \
     -f container/Dockerfile \
-    -t ghcr.io/adarshahd/aggregator:latest \
+    -t ghcr.io/adarshahd/aggregator:master \
     .
 ```
 
@@ -29,7 +29,7 @@ For Docker use the command below
 ```
 docker build \
     -f container/Dockerfile \
-    -t ghcr.io/adarshahd/aggregator:latest \
+    -t ghcr.io/adarshahd/aggregator:master \
     .
 ```
 ### Run application
@@ -38,12 +38,12 @@ For running application it is important to refer the .env file into the containe
 podman run \
     -p 8000:8000 \
     -v ./.env:/var/www/html/.env:Z \
-    ghcr.io/adarshahd/aggregator:latest
+    ghcr.io/adarshahd/aggregator:master
 ```
 For docker use below command
 ```
 docker run \
     -p 8000:8000 \
     -v ./.env:/var/www/html/.env \
-    ghcr.io/adarshahd/aggregator:latest
+    ghcr.io/adarshahd/aggregator:master
 ```
