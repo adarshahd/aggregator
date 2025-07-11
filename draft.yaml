@@ -1,0 +1,34 @@
+models:
+  User:
+    name: string
+    email: string, unique
+    email_verified_at: timestamp nullable
+    password: string
+    remember_token: string nullable
+    softDeletes: true
+  ArticleSource:
+    name: string:400
+    softDeletes: true
+    relationships:
+      hasMany: Article
+  ArticleAuthor:
+    name: string:400
+    softDeletes: true
+    relationships:
+      hasMany: Article
+  Article:
+    title: text, index
+    description: longtext
+    url: longtext
+    lang: string:300
+    thumbnail: longtext
+    time: timestamp
+    article_source_id: id foreign:article_sources
+    article_author_id: id foreign:article_authors
+    softDeletes: true
+    relationships:
+      belongsTo: ArticleSource, ArticleAuthor
+  Preference:
+    user_id: id foreign:users
+    authors: longtext # Store the authors id in a json
+    sources: longtext # Store the source id in a json
