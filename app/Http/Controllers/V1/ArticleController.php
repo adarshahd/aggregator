@@ -91,13 +91,13 @@ class ArticleController extends Controller
                         "article_author_id",
                         explode(",", $preference->authors)
                     )
+                    ->orderBy("time", "desc")
                     ->paginate(self::PER_PAGE_COUNT, page: $page);
             } else {
                 Cache::delete($cacheKey);
-                $articlePages = Article::query()->paginate(
-                    self::PER_PAGE_COUNT,
-                    page: $page
-                );
+                $articlePages = Article::query()
+                    ->orderBy("time", "desc")
+                    ->paginate(self::PER_PAGE_COUNT, page: $page);
             }
             $articles = $articlePages->items();
             $articleTotal = $articlePages->total();
