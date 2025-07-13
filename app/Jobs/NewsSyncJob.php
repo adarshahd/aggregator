@@ -8,6 +8,7 @@ use App\Models\ArticleSource;
 use App\Services\NewsBaseService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 
 class NewsSyncJob implements ShouldQueue
 {
@@ -28,6 +29,8 @@ class NewsSyncJob implements ShouldQueue
     public function handle(): void
     {
         $articleResult = $this->newsService->getTopArticles();
+        Log::info("Syncing " . $articleResult->count() . " Articles from " . $this->newsService::class);
+
         foreach ($articleResult as $articleItem) {
             $articleSource = ArticleSource::query()->firstOrCreate([
                 "name" => $articleItem["article_source_name"],

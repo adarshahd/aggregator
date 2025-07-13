@@ -1,9 +1,11 @@
 <?php
 
 use App\Jobs\NewsSyncJob;
+use App\Services\NewsApiAiService;
 use App\Services\NewsApiOrgService;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schedule;
 
 Artisan::command("inspire", function () {
@@ -11,11 +13,31 @@ Artisan::command("inspire", function () {
 })->purpose("Display an inspiring quote");
 
 /**
-    This will dispatch news sync jobs for all news providers and
-    starts syncing news articles
+    Dispatch job to sync articles from https://newsapi.org source
 */
 Schedule::call(function () {
     $newsApiOrgApiKey = env("NEWSAPI_ORG_KEY");
+    if ($newsApiOrgApiKey == null || $newsApiOrgApiKey == "") {
+        Log::error(
+            "No API key found for https://newsapi.org. Please provide a key"
+        );
+        return;
+    }
     $newsApiOrgService = new NewsApiOrgService($newsApiOrgApiKey);
     NewsSyncJob::dispatch($newsApiOrgService);
-})->everyMinute();
+})->everyFifteenMinutes();
+
+/**
+    Dispatch job to sync articles from https://newsapi.ai source
+*/
+Schedule::call(function () {
+    $newsApiAiApiKey = env("NEWSAPI_AI_KEY");
+    if ($newsApiAiApiKey == null || $newsApiAiApiKey == "") {
+        Log::error(
+            "No API key found for https://newsapi.ai. Please provide a key"
+        );
+        return;
+    }
+    $newsApiAiService = new NewsApiAiService($newsApiAiApiKey);
+    NewsSyncJob::dispatch($newsApiAiService);
+})->everyFifteenMinutes();
