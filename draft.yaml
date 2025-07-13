@@ -32,3 +32,13 @@ models:
     user_id: id foreign:users
     authors: longtext # Store the authors id in a json
     sources: longtext # Store the source id in a json
+
+controllers:
+  ArticleSource:
+    resource: api.index
+  ArticleAuthor:
+    resource: api.index
+  Article:
+    resource: api.index
+  Preference:
+    resource: api

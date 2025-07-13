@@ -1,0 +1,21 @@
+version: "3.0"
+services:
+  redis:
+    image: docker.io/redis:8-alpine
+    restart: always
+    networks:
+      - aggregator
+  aggregator:
+    build:
+      context: .
+      dockerfile: ./container/Dockerfile
+    image: ghcr.io/adarshahd/aggregator:master
+    volumes:
+      - ./.env:/var/www/html/.env:rw,Z
+    ports:
+      - 8000:8000
+    networks:
+      - aggregator
+
+networks:
+  aggregator:

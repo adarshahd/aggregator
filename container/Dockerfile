@@ -9,8 +9,8 @@ LABEL org.opencontainers.image.licenses="AGPL"
 RUN dnf update --refresh -y && \
     dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm && \
     dnf -y install https://rpms.remirepo.net/enterprise/remi-release-10.rpm && \
-    dnf -y module switch-to php:remi-8.3 && \
-    dnf -y install composer php php-pdo php-gd php-zip php-fpm unzip && \
+    dnf -y module switch-to php:remi-8.4 && \
+    dnf -y install composer php php-pdo php-gd php-zip php-yaml php-redis php-fpm unzip && \
     dnf clean all && \
     mkdir /run/php-fpm
 

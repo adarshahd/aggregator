@@ -11,11 +11,14 @@
 /.phpunit.cache
 /.vscode
 /.zed
+/.scribe
 /auth.json
 /node_modules
 /public/build
 /public/hot
 /public/storage
+/public/vendor/scribe
+/resources/views/scribe
 /storage/*.key
 /storage/pail
 /vendor
