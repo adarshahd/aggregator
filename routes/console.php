@@ -1,6 +1,7 @@
 <?php
 
 use App\Jobs\NewsSyncJob;
+use App\Services\GuardianApiService;
 use App\Services\NewsApiAiService;
 use App\Services\NewsApiOrgService;
 use Illuminate\Foundation\Inspiring;
@@ -41,3 +42,18 @@ Schedule::call(function () {
     $newsApiAiService = new NewsApiAiService($newsApiAiApiKey);
     NewsSyncJob::dispatch($newsApiAiService);
 })->everyFifteenMinutes();
+
+/**
+    Dispatch job to sync articles from https://open-platform.theguardian.com source
+*/
+Schedule::call(function () {
+    $theGuardianApiKey = env("GUARDIAN_KEY");
+    if ($theGuardianApiKey == null || $theGuardianApiKey == "") {
+        Log::error(
+            "No API key found for https://open-platform.theguardian.com. Please provide a key"
+        );
+        return;
+    }
+    $theGuardianApiService = new GuardianApiService($theGuardianApiKey);
+    NewsSyncJob::dispatch($theGuardianApiService);
+})->everyMinute();
