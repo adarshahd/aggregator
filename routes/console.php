@@ -56,4 +56,4 @@ Schedule::call(function () {
     }
     $theGuardianApiService = new GuardianApiService($theGuardianApiKey);
     NewsSyncJob::dispatch($theGuardianApiService);
-})->everyMinute();
+})->everyFifteenMinutes();

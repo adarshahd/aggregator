@@ -17,33 +17,28 @@ The above image describes the overall application architecture
 
 ## Build and run application
 ### Build application
-To build the application you need to have Podman/Docker installed in your system. From the terminal type below command if you have podman installed
+To build and run the application you need to have Podman/Docker installed in your system. From the terminal type below command if you have podman installed
 ```
-podman build \
-    -f container/Dockerfile \
-    -t ghcr.io/adarshahd/aggregator:master \
-    .
+podman compose \
+    -f compose.local.yml \
+    up \
+    --build
 ```
 
 For Docker use the command below
 ```
-docker build \
-    -f container/Dockerfile \
-    -t ghcr.io/adarshahd/aggregator:master \
-    .
+docker compose \
+    -f compose.local.yml \
+    up \
+    --build
 ```
-### Run application
-For running application it is important to refer the .env file into the container. For podman use below command
-```
-podman run \
-    -p 8000:8000 \
-    -v ./.env:/var/www/html/.env:Z \
-    ghcr.io/adarshahd/aggregator:master
-```
-For docker use below command
-```
-docker run \
-    -p 8000:8000 \
-    -v ./.env:/var/www/html/.env \
-    ghcr.io/adarshahd/aggregator:master
-```
+
+Please copy the .env file shared to the root of the application folder, before running the application
+
+Once the application is running, you can access swagger from the url http://localhost:8000/swagger
+
+Please create a user and generate token from the /register & /token URLs respectively. The token should be used to authenticate for other API requests.
+
+**** Although it was mentioned that authentication need not be implemented in the doc, it wouldn't be complete without authentication. That's why authentication is built into the application ****
+
+Articles are fetched with the help of background jobs, which are part of docker compose file (queue & scheduler). Articles are fetched regularly at 15 mins intervals

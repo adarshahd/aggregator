@@ -10,19 +10,25 @@ RUN dnf update --refresh -y && \
     dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm && \
     dnf -y install https://rpms.remirepo.net/enterprise/remi-release-10.rpm && \
     dnf -y module switch-to php:remi-8.4 && \
-    dnf -y install composer php php-pdo php-gd php-zip php-yaml php-redis php-fpm unzip && \
+    dnf -y install composer php php-pdo php-gd php-zip php-yaml php-redis php-mysqlnd php-fpm unzip && \
+    dnf -y install supervisor && \
     dnf clean all && \
     mkdir /run/php-fpm
 
 COPY . /var/www/html/
+
+COPY container/supervisord/*.ini /etc/supervisord.d/
+COPY container/startup.sh /usr/local/bin/
 
 WORKDIR /var/www/html
 
 RUN composer install --prefer-dist && \
     php artisan octane:install --server=frankenphp
 
-RUN touch database/database.sqlite && \
-    php artisan migrate --force && \
-    php artisan scribe:generate
+RUN php artisan scribe:generate
 
-CMD [ "php", "/var/www/html/artisan", "octane:start", "--server=frankenphp" ]
+RUN systemctl enable supervisord && \
+    chmod +x /usr/local/bin/startup.sh && \
+    rm -rf container
+
+CMD [ "startup.sh" ]

@@ -5,17 +5,53 @@ services:
     restart: always
     networks:
       - aggregator
+  db:
+    image: docker.io/mariadb:11
+    environment:
+      - MARIADB_ROOT_PASSWORD=supersecret
+      - MARIADB_DATABASE=aggregator
+      - MARIADB_USER=aggregator
+      - MARIADB_PASSWORD=secret
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - aggregator
+
   aggregator:
     build:
       context: .
       dockerfile: ./container/Dockerfile
     image: ghcr.io/adarshahd/aggregator:master
+    depends_on:
+      - db
     volumes:
-      - ./.env:/var/www/html/.env:rw,Z
+      - ./.env:/var/www/html/.env:rw,z
+      - ./storage:/var/www/html/storage:rw,z
     ports:
       - 8000:8000
     networks:
       - aggregator
+
+  queue:
+    depends_on:
+      - aggregator
+    image: ghcr.io/adarshahd/aggregator:master
+    volumes:
+      - ./.env:/var/www/html/.env:rw,z
+      - ./storage:/var/www/html/storage:rw,z
+    command: /usr/bin/supervisord -c /etc/supervisord.d/laravel-queue.ini
+
+  scheduler:
+    depends_on:
+      - aggregator
+    image: ghcr.io/adarshahd/aggregator:master
+    volumes:
+      - ./.env:/var/www/html/.env:rw,z
+      - ./storage:/var/www/html/storage:rw,z
+    command: /usr/bin/supervisord -c /etc/supervisord.d/laravel-scheduler.ini
 
 networks:
   aggregator:
