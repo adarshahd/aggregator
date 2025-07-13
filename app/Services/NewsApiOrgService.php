@@ -91,7 +91,7 @@ class NewsApiOrgService implements NewsBaseService
                 "title" => $articleItem["title"],
                 "description" => $articleItem["description"],
                 "url" => $articleItem["url"],
-                "lang" => null,
+                "lang" => "",
                 "thumbnail" => $articleItem["urlToImage"],
                 "time" => Carbon::parse($articleItem["publishedAt"]),
                 "article_source_name" => $articleItem["source"]["name"],
