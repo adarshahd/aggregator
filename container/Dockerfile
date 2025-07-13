@@ -22,6 +22,7 @@ RUN composer install --prefer-dist && \
     php artisan octane:install --server=frankenphp
 
 RUN touch database/database.sqlite && \
-    php artisan migrate --force
+    php artisan migrate --force && \
+    php artisan scribe:generate
 
 CMD [ "php", "/var/www/html/artisan", "octane:start", "--server=frankenphp" ]

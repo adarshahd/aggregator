@@ -9,7 +9,6 @@ services:
     image: ghcr.io/adarshahd/aggregator:master
     volumes:
       - ./.env:/var/www/html/.env:rw,Z
-      - ./data:var/www/html/storage:rw,Z
     ports:
       - 8000:8000
     networks:
